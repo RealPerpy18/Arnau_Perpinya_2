@@ -9,7 +9,15 @@ public class Reposador implements Runnable {
 
     @Override
     public void run() {
+        /*try {
+                monitor.reposar();
+                System.out.println("--------------------------------------------------------");
 
+
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }*/
     }
 
 
