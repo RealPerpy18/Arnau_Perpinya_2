@@ -8,7 +8,7 @@ public class Client implements Runnable{
     }
     @Override
     public void run() {
-        if(monitor.esObert()){
+
             try {
                 monitor.entrar();
                 Supermercat.missatge(nom+" entra");
@@ -17,27 +17,31 @@ public class Client implements Runnable{
                 Thread.sleep(Supermercat.getNumeroAleatori(Supermercat.PASSEIG_TEMPS_MIN, Supermercat.PASSEIG_TEMPS_MAX));
 
                 int rand=Supermercat.getNumeroAleatori(Supermercat.COMPRA_UNITATS_MIN,Supermercat.COMPRA_UNITATS_MAX);
-                System.out.println("---> "+nom+" "+rand);
-
-                    if (rand<=monitor.stock) {
+                while(unitats==-1) {
+                    Supermercat.missatge(nom + " comprant " + rand);
+                    if (rand <= monitor.stock) {
                         Thread.sleep(Supermercat.getNumeroAleatori(Supermercat.COMPRA_TEMPS_MIN, Supermercat.COMPRA_TEMPS_MAX));
-                        monitor.comprar(rand);
 
-                        Supermercat.missatge(nom + " comprant " + rand);
-                        unitats=rand;
+                        monitor.comprar(rand);
+                        monitor.sortir();
+                        unitats = rand;
+                        Supermercat.missatge(nom+" surt");
+
+
                     } else {
                         monitor.reposar();
+                        Thread.sleep(Supermercat.getNumeroAleatori(Supermercat.REPOSICIO_TEMPS_MIN, Supermercat.REPOSICIO_TEMPS_MAX));
+
                         Supermercat.missatge(nom + " esperant reposició ");
                     }
+                }
 
-
-
-                monitor.sortir();
-                Supermercat.missatge(nom+" surt");
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        }
+
+
+
     }
 }
