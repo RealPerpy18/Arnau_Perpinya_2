@@ -1,10 +1,10 @@
 public class ActivitatSupermercat {
 int ESTOC_MAX=Supermercat.ESTOC_MAX;
     static int stock=10;
-    boolean comprar=false;
+    boolean comprar=true;
     boolean obert=true;
     static int compres;
-    static int reposicions;
+    static int reposicions=0;
      int  persones=0;
 
 
@@ -19,34 +19,36 @@ int ESTOC_MAX=Supermercat.ESTOC_MAX;
     }
     public synchronized void entrar() throws InterruptedException {
         persones++;
-
     }
-    public synchronized void sortir(){
+    public synchronized void sortir() {
         persones--;
-
-
     }
-    public synchronized void comprar(int unitats) throws InterruptedException {
-
-
+    public synchronized boolean comprar(int unitats) throws InterruptedException {
+        if(stock<unitats){
+            comprar = false;
+            notify();
+        }
         while (!comprar) {
+            Supermercat.missatge(Thread.currentThread().getName()+" esperant reposició");
+                wait();
+            }
             stock = stock - unitats;
             compres++;
-            wait();
-            comprar = true;
+            sortir();
+        Supermercat.missatge(Thread.currentThread().getName()+" surt");
 
-        }notifyAll();
-
+        return true;
     }
     public synchronized void reposar() throws InterruptedException {
-        while (comprar) {
-            stock = ESTOC_MAX;
-            reposicions++;
-            comprar = false;
+           while (comprar){
             wait();
-        }
-
-
+           }
+        Supermercat.missatge(Thread.currentThread().getName()+" inicia reposició");
+        Thread.sleep(Supermercat.getNumeroAleatori(Supermercat.REPOSICIO_TEMPS_MIN, Supermercat.REPOSICIO_TEMPS_MAX));
+        comprar = true;
+        this.stock = ESTOC_MAX;
+        reposicions++;
+        Supermercat.missatge(Thread.currentThread().getName()+" acaba reposició");
         notifyAll();
     }
 

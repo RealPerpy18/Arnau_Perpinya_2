@@ -7,15 +7,17 @@ public class Reposador implements Runnable {
         this.monitor = monitor;
     }
 
+
     @Override
     public void run() {
         try {
-            monitor.entrar();
             Supermercat.missatge(nom+" entra");
-            Supermercat.missatge(nom+" descansa");
-        while (!monitor.esObert()){
+            Supermercat.missatge(nom+" descansar");
+            while (monitor.esObert()) {
+                monitor.reposar();
+            }
+            Supermercat.missatge(nom+" surt");
 
-        }
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
