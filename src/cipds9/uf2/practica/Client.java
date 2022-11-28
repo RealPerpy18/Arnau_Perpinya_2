@@ -1,4 +1,4 @@
-import javax.management.monitor.Monitor;
+package cipds9.uf2.practica;
 
 public class Client implements Runnable{
     private int unitats=-1;
@@ -14,6 +14,10 @@ public class Client implements Runnable{
         return nom;
     }
 
+    /**
+     *
+     * executa la funció del client
+     */
     @Override
     public void run() {
 
@@ -24,13 +28,14 @@ public class Client implements Runnable{
                 Supermercat.missatge(nom+" passejant");
                 Thread.sleep(Supermercat.getNumeroAleatori(Supermercat.PASSEIG_TEMPS_MIN, Supermercat.PASSEIG_TEMPS_MAX));
                 boolean comprat=false;
-                while(!comprat) {
+                while(!comprat) {           //mentres no ha comprat
                     int rand = Supermercat.getNumeroAleatori(Supermercat.COMPRA_UNITATS_MIN, Supermercat.COMPRA_UNITATS_MAX);
                     Supermercat.missatge(nom + " comprant " + rand);
                     Thread.sleep(Supermercat.getNumeroAleatori(Supermercat.COMPRA_TEMPS_MIN, Supermercat.COMPRA_TEMPS_MAX));
-                    comprat= monitor.comprar(rand);
+                    comprat= monitor.comprar(rand); //si fa la compra la booleana és true si no false i repeteix la compra
                 }
-
+                monitor.sortir();
+                Supermercat.missatge(Thread.currentThread().getName()+" surt");
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
