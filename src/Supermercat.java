@@ -42,11 +42,10 @@ public class Supermercat {
                 }
             }
 
-
-
         missatge("Compres "+monitor.compres);
         missatge("Reposicions "+monitor.reposicions);
-        missatge("Persones "+monitor.persones);
+
+
     }
     public static int getNumeroAleatori(int min, int max){
         Random random=new Random();
